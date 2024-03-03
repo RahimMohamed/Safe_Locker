@@ -1,0 +1,21 @@
+build/default/debug/application.p1:  \
+application.c  \
+application.h  \
+ECU_LAYER/DC_MOTOR/ecu_dc_motor.h  \
+ECU_LAYER/DC_MOTOR/ecu_dc_motor_cfg.h  \
+ECU_LAYER/DC_MOTOR/../../MCAL_LAYER/GPIO/hal_gpio.h  \
+ECU_LAYER/DC_MOTOR/../../MCAL_LAYER/GPIO/../mcal_std_types.h  \
+ECU_LAYER/DC_MOTOR/../../MCAL_LAYER/GPIO/../compiler.h  \
+ECU_LAYER/DC_MOTOR/../../MCAL_LAYER/GPIO/../std_libraries.h  \
+ECU_LAYER/DC_MOTOR/../../MCAL_LAYER/GPIO/../device_config/device_config.h  \
+ECU_LAYER/KEYPAD/ecu_keypad.h  \
+ECU_LAYER/KEYPAD/ecu_keypad_cfg.h  \
+ECU_LAYER/LCD/ecu_lcd.h  \
+ECU_LAYER/LCD/ecu_lcd_cfg.h  \
+ECU_LAYER/LED/ecu_led.h  \
+ECU_LAYER/LED/ecu_led_cfg.h  \
+MCAL_LAYER/EEPROM/eeprom.h  \
+MCAL_LAYER/EEPROM/../interrupt/mcal_internal_interrupt.h  \
+MCAL_LAYER/EEPROM/../interrupt/mcal_interrupt_config.h  \
+MCAL_LAYER/EEPROM/../interrupt/mcal_interrupt_gen_cfg.h  \
+MCAL_LAYER/interrupt/mcal_external_interrupt.h 
