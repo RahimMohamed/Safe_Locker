@@ -5093,7 +5093,7 @@ void Enter_password (void);
 # 8 "function.c" 2
 
 
-
+static void password_reset(void);
 static void password_handler(void);
 static void password(void);
 
@@ -5119,7 +5119,8 @@ void welcome_message(void){
 void Set_password (void){
    lcd_4bit_send_command(&lcd,0X01);
    _delay((unsigned long)((55)*(8000000UL/4000.0)));
-   lcd_4bit_send_string_pos(&lcd,1,1," Enter New Password");
+   if (password_flag == 0){
+        lcd_4bit_send_string_pos(&lcd,1,1," Enter New Password");
    lcd_4bit_send_string_pos(&lcd,3,8," ____");
    display_counter=9;
    while(password_counter != 4){
@@ -5129,6 +5130,8 @@ void Set_password (void){
           set_password1=set_password1*10+keypad_value;
           convert_byte_to_string(keypad_value,display_value);
           lcd_4bit_send_string_pos(&lcd,3,display_counter,display_value);
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,"*");
           display_counter++,password_counter++;
         }
            _delay((unsigned long)((200)*(8000000UL/4000.0)));
@@ -5145,12 +5148,56 @@ void Set_password (void){
            set_password2=set_password2*10+keypad_value;
           convert_byte_to_string(keypad_value,display_value);
           lcd_4bit_send_string_pos(&lcd,3,display_counter,display_value);
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,"*");
           display_counter++,password_counter++;
         }
            _delay((unsigned long)((200)*(8000000UL/4000.0)));
    }
     password_counter=0;
-   password_handler();
+    password_handler();
+
+   }
+   else{
+       lcd_4bit_send_string_pos(&lcd,1,1," Enter old Password");
+   lcd_4bit_send_string_pos(&lcd,3,8," ____");
+   display_counter=9;
+   while(password_counter != 4){
+       _delay((unsigned long)((55)*(8000000UL/4000.0)));
+        keypad_get_value(&keypad,&keypad_value);
+        if(keypad_value != (0xff)){
+          set_password1=set_password1*10+keypad_value;
+          convert_byte_to_string(keypad_value,display_value);
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,display_value);
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,"*");
+          display_counter++,password_counter++;
+        }
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+   }
+   password_counter=0;
+    _delay((unsigned long)((55)*(8000000UL/4000.0)));
+    lcd_4bit_send_command(&lcd,0X01);
+   lcd_4bit_send_string_pos(&lcd,1,1," Enter new Password");
+   lcd_4bit_send_string_pos(&lcd,3,8," ____");
+   display_counter=9;
+     while(password_counter != 4){
+        keypad_get_value(&keypad,&keypad_value);
+        if(keypad_value != (0xff)){
+           set_password2=set_password2*10+keypad_value;
+          convert_byte_to_string(keypad_value,display_value);
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,display_value);
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+          lcd_4bit_send_string_pos(&lcd,3,display_counter,"*");
+          display_counter++,password_counter++;
+        }
+           _delay((unsigned long)((200)*(8000000UL/4000.0)));
+   }
+    password_counter=0;
+    password_reset();
+   }
+
+
 
 }
 
@@ -5168,7 +5215,7 @@ void Enter_password (void){
           entered_value=entered_value*10+keypad_value;
           convert_byte_to_string(keypad_value,display_value);
           lcd_4bit_send_string_pos(&lcd,3,display_counter,display_value);
-            _delay((unsigned long)((300)*(8000000UL/4000.0)));
+            _delay((unsigned long)((200)*(8000000UL/4000.0)));
           lcd_4bit_send_string_pos(&lcd,3,display_counter,"*");
           display_counter++,password_counter++;
         }
@@ -5184,12 +5231,10 @@ void App_ISR(void){
      lcd_4bit_send_string_pos(&lcd,3,1,"Try after 1 min");
      password_flag=0;
       motor_stop(&motor);
-       led_turn_off(&green_led);
-     led_turn_on(&red_led);
-     gpio_pin_Write_logic(&buzzer,HIGH);
-     _delay((unsigned long)((2500)*(8000000UL/4000.0)));
-     led_turn_off(&red_led);
+      led_turn_off(&green_led);
+      led_turn_off(&red_led);
      gpio_pin_Write_logic(&buzzer,LOW);
+     _delay((unsigned long)((5000)*(8000000UL/4000.0)));
      lcd_4bit_send_command(&lcd,0X01);
 }
 
@@ -5252,4 +5297,33 @@ static void password(void){
 
     }
     entered_value=0,memory_value=0;
+}
+
+static void password_reset(void){
+    Data_EEPROM_ReadByte(0x3F9,&high_pass);
+    Data_EEPROM_ReadByte(0x3FA,&low_pass);
+
+    memory_value=high_pass*100+low_pass;
+
+     if(memory_value==set_password1){
+     lcd_4bit_send_command(&lcd,0X01);
+      high_pass=set_password2/100;
+     low_pass=set_password2%100;
+     Data_EEPROM_WriteByte(0x3F9,high_pass);
+     Data_EEPROM_WriteByte(0x3FA,low_pass);
+
+     lcd_4bit_send_string_pos(&lcd,2,1," Password Changed");
+     lcd_4bit_send_string_pos(&lcd,3,1," Successfully");
+     _delay((unsigned long)((1500)*(8000000UL/4000.0)));
+     lcd_4bit_send_command(&lcd,0X01);
+    }
+     else{
+           lcd_4bit_send_command(&lcd,0X01);
+     lcd_4bit_send_string_pos(&lcd,2,1," Password Wrong");
+     lcd_4bit_send_string_pos(&lcd,3,1," Please,Try again");
+     _delay((unsigned long)((1500)*(8000000UL/4000.0)));
+     lcd_4bit_send_command(&lcd,0X01);
+     }
+      set_password1=0,set_password2=0,high_pass=0,low_pass=0;
+      entered_value=0,memory_value=0;
 }
