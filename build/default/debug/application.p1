@@ -482,7 +482,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;D:/Program Files/Microchip/MPLABX/v6.15/packs/Microchip/PIC18Fxxxx_DFP/1.4.151/xc8\pic\include\proc\pic18f4620.h: 6715: __asm("TOSU equ 0FFFh");
 [; <" TOSU equ 0FFFh ;# ">
 "27 ./application.h
-[; ;./application.h: 27: uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0;
+[; ;./application.h: 27: uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0,safe_flag=0;
 [v _keypad_value `uc ~T0 @X0 1 e ]
 [i _keypad_value
 -> -> 0 `i `uc
@@ -502,6 +502,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 ]
 [v _wrongs_counter `uc ~T0 @X0 1 e ]
 [i _wrongs_counter
+-> -> 0 `i `uc
+]
+[v _safe_flag `uc ~T0 @X0 1 e ]
+[i _safe_flag
 -> -> 0 `i `uc
 ]
 "28
@@ -763,8 +767,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;application.c: 27:              case 1:
 [e :U 288 ]
 "28
-[; ;application.c: 28:                  if(password_flag==1){
-[e $ ! == -> _password_flag `i -> 1 `i 289  ]
+[; ;application.c: 28:                  if(password_flag==1&&safe_flag==1){
+[e $ ! && == -> _password_flag `i -> 1 `i == -> _safe_flag `i -> 1 `i 289  ]
 {
 "29
 [; ;application.c: 29:                      Enter_password();

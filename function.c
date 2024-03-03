@@ -111,7 +111,7 @@ void Set_password (void){
     password_reset();
    }
    
-  
+   safe_flag=1;
    
 }
 /***********************************************************************************************************/
@@ -143,7 +143,7 @@ void App_ISR(void){
      lcd_4bit_send_command(&lcd,_LCD_CLEAR);
      lcd_4bit_send_string_pos(&lcd,2,10," Locker Stopped");
      lcd_4bit_send_string_pos(&lcd,3,1,"Try after 1 min");
-     password_flag=0;
+     safe_flag=0;
       motor_stop(&motor);
       led_turn_off(&green_led);
       led_turn_off(&red_led);

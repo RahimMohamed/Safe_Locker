@@ -4972,7 +4972,7 @@ Std_ReturnType Interrupt_RBx_Init (const interrupt_RBx_t * int_obj);
 Std_ReturnType Interrupt_RBx_DeInit (const interrupt_RBx_t * int_obj);
 # 18 "./application.h" 2
 # 27 "./application.h"
-uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0;
+uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0,safe_flag=0;
 uint_16 set_password1=0,set_password2=0,high_pass=0,low_pass=0,entered_value=0,memory_value;
 
 motor_t motor ={
@@ -5197,7 +5197,7 @@ void Set_password (void){
     password_reset();
    }
 
-
+   safe_flag=1;
 
 }
 
@@ -5229,7 +5229,7 @@ void App_ISR(void){
      lcd_4bit_send_command(&lcd,0X01);
      lcd_4bit_send_string_pos(&lcd,2,10," Locker Stopped");
      lcd_4bit_send_string_pos(&lcd,3,1,"Try after 1 min");
-     password_flag=0;
+     safe_flag=0;
       motor_stop(&motor);
       led_turn_off(&green_led);
       led_turn_off(&red_led);

@@ -4972,7 +4972,7 @@ Std_ReturnType Interrupt_RBx_Init (const interrupt_RBx_t * int_obj);
 Std_ReturnType Interrupt_RBx_DeInit (const interrupt_RBx_t * int_obj);
 # 18 "./application.h" 2
 # 27 "./application.h"
-uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0;
+uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0,safe_flag=0;
 uint_16 set_password1=0,set_password2=0,high_pass=0,low_pass=0,entered_value=0,memory_value;
 
 motor_t motor ={
@@ -5111,7 +5111,7 @@ int main(int argc, char** argv) {
        if(keypad_value != (0xff)){
         switch (keypad_value){
              case 1:
-                 if(password_flag==1){
+                 if(password_flag==1&&safe_flag==1){
                      Enter_password();
                  }
                  else

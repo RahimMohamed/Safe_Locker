@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
        if(keypad_value != (0xff)){
         switch (keypad_value){
              case 1:
-                 if(password_flag==1){
+                 if(password_flag==1&&safe_flag==1){
                      Enter_password();
                  }
                  else

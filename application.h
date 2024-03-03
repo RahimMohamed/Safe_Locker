@@ -24,7 +24,7 @@
 
 
 /*section : Data Type Declaration  */
-uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0;
+uint_8 keypad_value=0,display_value[4],password_counter=0,password_flag=0,display_counter=0,wrongs_counter=0,safe_flag=0;
 uint_16 set_password1=0,set_password2=0,high_pass=0,low_pass=0,entered_value=0,memory_value;
 /*---------------------------------motor-------------------------------------*/
 motor_t motor ={
